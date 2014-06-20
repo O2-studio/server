@@ -5,6 +5,20 @@ app = Flask(__name__)
 def api_root():
     return 'Welcome'
 
+@app.route('/tags')
+def api_tags():
+	return 'List of tags'
+
+@app.route('/tag/<tagname>')
+def api_tagname(tagname):
+	return 'list of docs with tag' + tagname
+
+
+
+"""
+@app.route()
+
+
 @app.route('/articles')
 def api_articles():
     return 'List of ' + url_for('api_articles')
@@ -25,6 +39,8 @@ def api_article(articleid):
 @app.route('/articles/<articleid>/upvote')
 def api_upvote(articleid):
     return str(5 + int(articleid))
+
+"""
 
 if __name__ == '__main__':
     app.run()
