@@ -3,18 +3,18 @@ server
 
 ###api
 
-- /tags - list all tags
-- /tag/\<tagname\> - #list# docs with tag tagname
-- /tag/\<tagname\>/recent?count=10 - list 10 recent docs of this tag
-- /tag/\<tagname\>/recent?count=5&full=true - return json of all details of 5 recent docs
-- /docs - list all docs
-- /doc/\<docname\> - get details of doc docname
-- /doc/recent?count=20
-- /doc/recent?count=10&full=true
-- /doc/popular?count=8&full=true
-- /static/img/\<imgname\>
-- /doc/\<docname\>/voteup
-- /doc/\<docname\>/votedown
+- GET /tags - list all tags
+- GET /tag/\<tagname\> - _list_ docs with tag tagname
+- GET /tag/\<tagname\>/recent?from=1&to=10
+- GET /tag/\<tagname\>/recent?from=5&to=7&full=true
+- GET /docs - list all docs
+- GET /doc/\<docid\> - get details of doc docid
+- GET /doc/recent?from=11&to=20
+- GET /doc/recent?from=11&to=20&full=true
+- GET /doc/popular?from=11&to=20&full=true
+- GET /static/img/\<imgname\>
+- POST /doc/\<docid\>/voteup
+- POST /doc/\<docid\>/votedown
 - POST /submit
 
 
@@ -22,8 +22,8 @@ server
 
 ```json
 {
+  "id": "doc id 1,2,3,...",
   "name": "doc name",
-  "fullname": "doc full name for displaying",
   "ctime": "creation time",
   "tags": [
     "tag1 name",
@@ -31,6 +31,10 @@ server
   ],
   "voteup": 10,
   "votedown": 3,
-  "data": "doc content"
+  "data": "doc content",
+  "comments": [
+    "comment 1",
+    "comment 2"
+  ]
 }
 ```
