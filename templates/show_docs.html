@@ -1,0 +1,29 @@
+{% extends "layout.html" %}
+{% block body %}
+  {% if session.logged_in %}
+    <form action="{{ url_for('web_docs') }}" method=post class=add-doc>
+      <dl>
+        <dt>Doc Title:</dt>
+        <dd><input type=text size=30 name=title></dd>
+        <dt>Content:</dt>
+        <dd><textarea name=content rows=5 cols=40></textarea></dd>
+        <dt>Tag:</dt>
+        <dd>
+          <select name=tagid>
+            {% for tag in taglist %}
+            <option value="{{ tag.id }}">{{ tag.name }}</option>
+            {% endfor %}
+          </select>
+        </dd>
+        <dd><input type=submit value=Add></dd>
+      </dl>
+    </form>
+  {% endif %}
+  <ul class=docs>
+  {% for doc in doclist %}
+    <li>{{ doc.id }}: <a href="/doc/{{ doc.id }}">{{ doc.title }}</a></li>
+  {% else %}
+    <li><em>no doc in db</em></li>
+  {% endfor %}
+  </ul>
+{% endblock %}

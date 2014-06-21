@@ -1,6 +1,9 @@
-<h1>home page</h1>
-<hr>
-you can access the following urls
-<p>
-
-<li>1</li>
+{% extends "layout.html" %}
+{% block body %}
+  <p> you can go to <p>
+  <li><a href="/tags">tags</a></li>
+  <li><a href="/tag/1">tag/1</a></li>
+  <li><a href="/docs">docs</a></li>
+  <li><a href="/doc/1">doc/1</a></li>
+  <li><a href="/recent">recent</a></li>
+{% endblock %}
