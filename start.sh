@@ -1,1 +1,1 @@
-python ./controller/server.py
+python server.py
