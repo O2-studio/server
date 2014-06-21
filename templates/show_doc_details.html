@@ -1,0 +1,18 @@
+{% extends "layout.html" %}
+{% block body %}
+  <dl>
+    <dt>Title: </dt>
+    <dd>{{ doc[1] }}</dd>
+    <dt>Content: </dt>
+    <dd>{{ doc[2] }}</dd>
+    <dt>Tag: </dt>
+    <dd><a href="/tag/{{ tag[0] }}">{{ tag[1] }}</a></dd>
+    <dt>Upvote: </dt>
+    <dd>{{ doc[4] }}</dd>
+    <dt>Downvote: </dt>
+    <dd>{{ doc[5] }}</dd>
+    <hr>
+    <dd><input type=submit value=Upvote></dd>
+    <dd><input type=submit value=Downvote></dd>
+  </dl>
+{% endblock %}

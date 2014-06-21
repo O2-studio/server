@@ -1,0 +1,11 @@
+{% extends "layout.html" %}
+{% block body %}
+  <em>docs with tag {{ tagname }}</em>
+  <ul class=docs>
+  {% for doc in doclist %}
+    <li>{{ doc.id }}: <a href="/doc/{{ doc.id }}">{{ doc.title }}</a></li>
+  {% else %}
+    <li><em>no doc with tag {{ tagname }} in db</em></li>
+  {% endfor %}
+  </ul>
+{% endblock %}

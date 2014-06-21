@@ -134,25 +134,52 @@ def web_docs():
         taglist=taglist)
 
 
-'''
 @app.route('/tag/<int:tagid>')
-def api_tagid(tagid):
-	return 'list of docs with tag' + str(tagid)
+def web_tagid(tagid):
+    '''
+    list all docs with tag tagid
+    '''
+    db=get_db()
+    cur=db.execute("select id, name from tags where id='" + str(tagid) + "'")
+    tagname=cur.fetchone()[1]
 
-@app.route('/docs')
-def api_docs():
-    return 'List of all ' + url_for('api_docs')
+    cur=db.execute("select id, title, content, tag_id, upvote, downvote \
+        from docs where tag_id='" + str(tagid) + "'")
+    doclist=cur.fetchall()
 
-@app.route('/doc/<int:docid>')
-def api_docid(docid):
-    return 'show doc ' + str(docid)
+    return render_template('show_tag_docs.html', doclist=doclist, \
+        tagname=tagname)
 
-@app.route('/doc/<int:docid>/upvote', methods=['GET', 'POST'])
-def api_upvote(docid):
-    if request.method == 'POST':
-        return "upvote++ for doc " + str(docid)
-    else:
-        return 'show upvote of ' + str(docid)
+
+@app.route('/doc/<int:docid>', methods=['GET', 'POST'])
+def web_docid(docid):
+    '''show doc details'''
+    db=get_db()
+    cur=db.execute("select id, title, content, tag_id, upvote, downvote \
+        from docs where id='" + str(docid) + "'")
+    doc=cur.fetchone()
+
+    if request.method=='POST':
+        if not session.get('logged_in'):
+            abort(401)
+        #if is upvote
+        #db.execute('insert into docs (title, content, tag_id, \
+        #    upvote, downvote) values (?, ?, ?, 0, 0)', \
+        #    [request.form['title'], request.form['content'], \
+        #    request.form['tagid']])
+        #db.commit()
+        #flash('upvote successfully')
+        #else ...
+        return redirect(url_for('web_docid'))
+
+    cur=db.execute("select id, name from tags where id='" + str(doc[3]) + "'")
+    tag=cur.fetchone()
+
+    return render_template('show_doc_details.html', doc=doc, \
+        tag=tag)
+
+
+'''
 
 @app.route('/recent')
 def api_recent():
