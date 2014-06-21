@@ -1,2 +1,2 @@
-sudo pip install flask
+sudo pip install virtualenv
 sudo apt-get install redis-server
