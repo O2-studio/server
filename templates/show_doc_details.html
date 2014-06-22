@@ -12,7 +12,7 @@
     <dt>Downvote: </dt>
     <dd>{{ doc[5] }}</dd>
     <hr>
-    <dd><input type=submit value=Upvote></dd>
-    <dd><input type=submit value=Downvote></dd>
+    <dd><a href="/doc/{{ doc[0] }}/upvote">upvote</a></dd>
+    <dd><a href="/doc/{{ doc[0] }}/downvote">downvote</a></dd>
   </dl>
 {% endblock %}

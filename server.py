@@ -97,7 +97,6 @@ def web_tags():
     #GET
     cur = db.execute('select id, name from tags order by id')
     taglist=cur.fetchall()
-    print taglist
 
     return render_template('show_tags.html', taglist=taglist)
 
@@ -112,14 +111,11 @@ def web_docs():
     if request.method=='POST':
         if not session.get('logged_in'):
             abort(401)
-        print 'check1'
         db.execute('insert into docs (title, content, tag_id, \
             upvote, downvote) values (?, ?, ?, 0, 0)', \
             [request.form['title'], request.form['content'], \
             request.form['tagid']])
-        print 'check2'
         db.commit()
-        print 'check3'
         flash('new doc added successfully')
         return redirect(url_for('web_docs'))
     #GET
@@ -140,44 +136,59 @@ def web_tagid(tagid):
     list all docs with tag tagid
     '''
     db=get_db()
-    cur=db.execute("select id, name from tags where id='" + str(tagid) + "'")
+    cur=db.execute("select id, name from tags where id='" \
+        + str(tagid) + "'")
     tagname=cur.fetchone()[1]
 
-    cur=db.execute("select id, title, content, tag_id, upvote, downvote \
-        from docs where tag_id='" + str(tagid) + "'")
+    cur=db.execute("select id, title, content, tag_id, upvote, \
+        downvote from docs where tag_id='" + str(tagid) + "'")
     doclist=cur.fetchall()
 
-    return render_template('show_tag_docs.html', doclist=doclist, \
-        tagname=tagname)
+    return render_template('show_tag_docs.html', \
+        doclist=doclist, tagname=tagname)
 
 
-@app.route('/doc/<int:docid>', methods=['GET', 'POST'])
+@app.route('/doc/<int:docid>')
 def web_docid(docid):
     '''show doc details'''
     db=get_db()
-    cur=db.execute("select id, title, content, tag_id, upvote, downvote \
-        from docs where id='" + str(docid) + "'")
+    cur=db.execute("select id, title, content, tag_id, upvote, \
+        downvote from docs where id='" + str(docid) + "'")
     doc=cur.fetchone()
 
-    if request.method=='POST':
-        if not session.get('logged_in'):
-            abort(401)
-        #if is upvote
-        #db.execute('insert into docs (title, content, tag_id, \
-        #    upvote, downvote) values (?, ?, ?, 0, 0)', \
-        #    [request.form['title'], request.form['content'], \
-        #    request.form['tagid']])
-        #db.commit()
-        #flash('upvote successfully')
-        #else ...
-        return redirect(url_for('web_docid'))
-
-    cur=db.execute("select id, name from tags where id='" + str(doc[3]) + "'")
+    cur=db.execute("select id, name from tags where id='" + \
+        str(doc[3]) + "'")
     tag=cur.fetchone()
 
     return render_template('show_doc_details.html', doc=doc, \
         tag=tag)
 
+@app.route('/doc/<int:docid>/upvote')
+def web_upvote(docid):
+    '''upvote++'''
+    db=get_db()
+    cur=db.execute("select id, upvote from docs where id='" \
+        + str(docid) + "'")
+    uv=cur.fetchone()[1]
+    db.execute('update docs set upvote=' + str(uv+1) + \
+        " where id='"+str(docid)+"'")
+    db.commit()
+    flash('upvote successfully')
+    return redirect(url_for('web_docid', docid=docid))
+
+
+@app.route('/doc/<int:docid>/downvote')
+def web_downvote(docid):
+    '''downvote++'''
+    db=get_db()
+    cur=db.execute("select id, downvote from docs where id='" \
+        + str(docid) + "'")
+    dv=cur.fetchone()[1]
+    db.execute('update docs set downvote=' + str(dv+1) + \
+        " where id='"+str(docid)+"'")
+    db.commit()
+    flash('downvote successfully')
+    return redirect(url_for('web_docid', docid=docid))
 
 '''
 
