@@ -1,18 +1,17 @@
 {% extends "layout.html" %}
 {% block body %}
-  <dl>
-    <dt>Title: </dt>
-    <dd>{{ doc[1] }}</dd>
-    <dt>Content: </dt>
-    <dd>{{ doc[2] }}</dd>
-    <dt>Tag: </dt>
-    <dd><a href="/tag/{{ tag[0] }}">{{ tag[1] }}</a></dd>
-    <dt>Upvote: </dt>
-    <dd>{{ doc[4] }}</dd>
-    <dt>Downvote: </dt>
-    <dd>{{ doc[5] }}</dd>
+  <div class="doc">
+    <div class="header">
+        <p class="title">{{ doc[1]|safe }}</p>
+        <a href="/tag/{{ tag[0] }}">#{{ tag[1] }}</a>
+    </div>
+    <div class="content">
+        {{ doc[2]|safe }}
+    </div>
     <hr>
-    <dd><a href="/doc/{{ doc[0] }}/upvote">upvote</a></dd>
-    <dd><a href="/doc/{{ doc[0] }}/downvote">downvote</a></dd>
-  </dl>
+    <div class="vote">   
+        <a href="/doc/{{ doc[0] }}/upvote">Vote Up</a> #{{ doc[4] }}
+        <a href="/doc/{{ doc[0] }}/downvote">Vote Down</a> #{{ doc[5] }}
+    </div>
+  </div>
 {% endblock %}

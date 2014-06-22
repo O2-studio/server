@@ -1,0 +1,96 @@
+body
+{
+	background: #eee;
+	font-family: sans-serif;
+}
+a, h1, h2
+{
+	color: #377ba8;
+}
+h1, h2
+{
+	font-family: 'Georgia', serif;
+	margin: 0;
+}
+h1
+{
+	border-bottom: 2px solid #eee;
+}
+h2
+{
+	font-size: 1.2em;
+}
+.page
+{
+	background: white;
+	border: 10px solid #ccc;
+	margin: 2em auto;
+	padding: 0.8em;
+	width: 50em;
+}
+.metanav
+{
+	background: #fbfbfb;
+	font-size: 0.8em;
+	margin-bottom: 1em;
+	padding: 0.3em;
+	text-align: right;
+}
+.flash
+{
+	background: #cee5F5;
+	border: 1px solid #aacbe2;
+	padding: 0.5em;
+}
+.error
+{
+	background: #f0d6d6;
+	padding: 0.5em;
+}
+
+table {
+	width: 50%;
+	text-align: center;
+	border: 1px solid #CCCCCC;
+
+}
+
+caption {
+	text-align: center;
+	background-color: #EFEFEF;
+	border: 1px solid #CCCCCC;
+	font-weight: bold;
+}
+
+th {
+	border: 1px solid #CCCCCC;
+}
+
+td {
+	border: 1px solid #CCCCCC;
+}
+
+.title {
+	font-size: 42px;
+	display: inline;
+}
+
+.doc {
+	margin: 10%;
+}
+
+.header {
+	padding-bottom: 40px;
+}
+
+.content {
+	padding-bottom: 40px;
+}
+
+.vote {
+	display: inline;
+}
+
+.vote a {
+	
+}

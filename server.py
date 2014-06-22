@@ -140,8 +140,9 @@ def web_tagid(tagid):
         + str(tagid) + "'")
     tagname=cur.fetchone()[1]
 
-    cur=db.execute("select id, title, content, tag_id, upvote, \
-        downvote from docs where tag_id='" + str(tagid) + "'")
+    cur=db.execute("select * from (select id, title, content, \
+        tag_id, upvote, downvote from docs where tag_id='" + \
+        str(tagid) + "') order by id desc ")
     doclist=cur.fetchall()
 
     return render_template('show_tag_docs.html', \

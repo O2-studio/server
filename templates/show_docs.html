@@ -19,11 +19,25 @@
       </dl>
     </form>
   {% endif %}
-  <ul class=docs>
-  {% for doc in doclist %}
-    <li>{{ doc.id }}: <a href="/doc/{{ doc.id }}">{{ doc.title }}</a></li>
-  {% else %}
-    <li><em>no doc in db</em></li>
-  {% endfor %}
-  </ul>
+  <hr>
+  <table>
+    <caption>Existing Docs</caption>
+    <thead>
+      <tr>
+        <th>Doc ID</th>
+        <th>Doc Title</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for doc in doclist %}
+        <tr>
+          <td><a href="/doc/{{ doc.id }}">{{ doc.id }}</a></td>
+          <td>{{ doc.title|safe }}</td>
+          {% else %}
+          <td>NA</td>
+          <td>no docs in db</td>
+        </tr>
+      {% endfor %}
+    </tbody>
+  </table>
 {% endblock %}

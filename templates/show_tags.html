@@ -9,11 +9,25 @@
       </dl>
     </form>
   {% endif %}
-  <ul class=tags>
-  {% for tag in taglist %}
-    <li>{{ tag.id }}: <a href="/tag/{{ tag.id }}">{{ tag.name }}</a></li>
-  {% else %}
-    <li><em>no tags in db</em></li>
-  {% endfor %}
-  </ul>
+  <hr>
+  <table>
+    <caption>Existing Tags</caption>
+    <thead>
+      <tr>
+        <th>Tag ID</th>
+        <th>Tag Name</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for tag in taglist %}
+        <tr>
+          <td><a href="/tag/{{ tag.id }}">{{ tag.id }}</a></td>
+          <td>{{ tag.name }}</td>
+          {% else %}
+          <td>NA</td>
+          <td>no tags in db</td>
+        </tr>
+      {% endfor %}
+    </tbody>
+  </table>
 {% endblock %}
