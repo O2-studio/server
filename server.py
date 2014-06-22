@@ -190,19 +190,32 @@ def web_downvote(docid):
     flash('downvote successfully')
     return redirect(url_for('web_docid', docid=docid))
 
-'''
 
-@app.route('/recent')
-def api_recent():
-    from_index = request.args.get('from', '1')
-    to_index = request.args.get('to', '10')
-    return 'most recent docs from ' + from_index + ' to ' + to_index
+@app.route('/doc/recent')
+def web_doc_recent():
+    '''
+    begin and end are not ids
+    they are the index of doc sort by id desc 
+    from 1 to doc count
+    '''
+    begin = request.args.get('begin', '1')
+    end = request.args.get('end', '10')
+
+    db=get_db()
+    cur=db.execute("select id, title, content, tag_id, upvote, \
+        downvote from docs order by id desc limit " + \
+        str(int(end)-int(begin)+1) + " offset " + \
+        str(int(begin)-1))
+    doclist=cur.fetchall()
+
+    return render_template("show_recent_docs.html", \
+        doclist=doclist, begin=begin, end=end)
+
 
 @app.route('/imgs')
-def api_imgs():
-    return '\n'.join(os.listdir("static/img"))
+def web_imgs():
+    return "available imgs:<p>"+'\n'.join(os.listdir("static/img"))
 
-'''
 
 #### 404 customizatiohn ####
 

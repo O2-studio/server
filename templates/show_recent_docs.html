@@ -1,0 +1,11 @@
+{% extends "layout.html" %}
+{% block body %}
+  <p>order docs by id desc, showing from # {{ begin }} to {{ end }}</p>
+  <ul class=docs>
+  {% for doc in doclist %}
+    <li>{{ doc.id }}: <a href="/doc/{{ doc.id }}">{{ doc.title }}</a></li>
+  {% else %}
+    <li><em>no doc in db</em></li>
+  {% endfor %}
+  </ul>
+{% endblock %}
