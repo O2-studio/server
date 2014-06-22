@@ -1,9 +1,20 @@
 {% extends "layout.html" %}
 {% block body %}
-  <p> you can go to <p>
-  <li><a href="/tags">tags</a></li>
-  <li><a href="/tag/1">tag/1</a></li>
-  <li><a href="/docs">docs</a></li>
-  <li><a href="/doc/1">doc/1</a></li>
-  <li><a href="/doc/recent">/doc/recent</a></li>
+  <p> Hello and welcome. Pls report bugs to 
+  <a href="mailto:ralph.wen@gmail.com?Subject=Smart%20Web%20Bug">Ralph.</a>
+  <p>
+  <p>If you are interested. You can view code or fork repo from 
+  <a href="https://github.com/smart-app/server">Github</a>.</p><p></p>
+  <lu>
+  <h2>Quick Links</h2><p>
+  <li><a href="/tags">tags</a> - add a new tag(login required) and list existing tags</li>
+  <li><a href="/tag/1">tag/1</a> - show docs with tag #1</li>
+  <li><a href="/docs">docs</a> - add a new doc(login required) and list existing docs</li>
+  <li><a href="/doc/7">doc/2</a> - show details of doc #7</li>
+  <li><a href="/doc/recent?begin=2&amp;end=5">/doc/recent?begin=2&amp;end=5</a> - order all docs by id desc and show the 2nd doc to the 5th doc</li>
+  <li><a href="/imgs">imgs</a> - show image list under img</li>
+  </lu>
+  <p></p>
+  <h2>API</h2><p></p>
+  todo
 {% endblock %}

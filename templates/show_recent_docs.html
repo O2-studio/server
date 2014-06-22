@@ -15,7 +15,7 @@
       {% for doc in doclist %}
         <tr>
           <td><a href="/doc/{{ doc.id }}">{{ doc.id }}</a></td>
-          <td>{{ doc.title }}</td>
+          <td>{{ doc.title|safe }}</td>
           {% else %}
           <td>NA</td>
           <td>no docs in db</td>
