@@ -1,5 +1,10 @@
 import os, sqlite3
 
+try:
+    import simplejson as json
+except ImportError:
+    import json
+
 from flask import Flask, request, session, g, redirect, \
     url_for, abort, render_template, flash
 
@@ -10,12 +15,11 @@ app.config.from_object(__name__)
 
 app.config.update(dict(
     DATABASE=os.path.join(app.root_path, 'data.db'),
-   # DEBUG=True,
-    SECRET_KEY='temp key',
+    #DEBUG=True, #comment out in production
+    SECRET_KEY='temp key',#replace in prod
     USERNAME='iam',
     PASSWORD='smart'
 ))
-
 
 #### model ####
 
@@ -26,8 +30,8 @@ def connect_db():
 
 def get_db():
     '''
-    if application context g doesn't have db
-    connected then connect
+    if application context g doesn't have db connected
+    then connect
     '''
     if not hasattr(g, 'sqlite_db'):
         g.sqlite_db=connect_db()
@@ -47,14 +51,12 @@ def init_db():
             db.cursor().executescript(f.read())
         db.commit()
 
-
 #### controller - web ####
 
 @app.route('/')
 def web_root():
     '''
     show home page
-    to do
     '''
     return render_template('index.html')
 
@@ -81,7 +83,7 @@ def logout():
 @app.route('/tags', methods=['GET', 'POST'])
 def web_tags():
     '''
-    add new tag if POST
+    add new tag when POST
     show tag list and add new tag form
     '''
     db=get_db()
@@ -93,7 +95,6 @@ def web_tags():
         db.commit()
         flash('new tag added successfully')
         return redirect(url_for('web_tags'))
-
     #GET
     cur = db.execute('select id, name from tags order by id')
     taglist=cur.fetchall()
@@ -122,10 +123,8 @@ def web_docs():
     cur=db.execute('select id, title, content, tag_id, \
         upvote, downvote from docs order by id desc')
     doclist=cur.fetchall()
-
-    cur1 = db.execute('select id, name from tags order by id')
-    taglist=cur1.fetchall()
-
+    cur = db.execute('select id, name from tags order by id')
+    taglist=cur.fetchall()
     return render_template('show_docs.html', doclist=doclist, \
         taglist=taglist)
 
@@ -136,15 +135,13 @@ def web_tagid(tagid):
     list all docs with tag tagid
     '''
     db=get_db()
-    cur=db.execute("select id, name from tags where id='" \
-        + str(tagid) + "'")
+    cur=db.execute("select id, name from tags where id=?", \
+            [str(tagid)])
     tagname=cur.fetchone()[1]
-
     cur=db.execute("select * from (select id, title, content, \
-        tag_id, upvote, downvote from docs where tag_id='" + \
-        str(tagid) + "') order by id desc ")
+        tag_id, upvote, downvote from docs where tag_id=?) \
+        order by id desc", [str(tagid)])
     doclist=cur.fetchall()
-
     return render_template('show_tag_docs.html', \
         doclist=doclist, tagname=tagname)
 
@@ -154,13 +151,11 @@ def web_docid(docid):
     '''show doc details'''
     db=get_db()
     cur=db.execute("select id, title, content, tag_id, upvote, \
-        downvote from docs where id='" + str(docid) + "'")
+        downvote from docs where id=?", [str(docid)])
     doc=cur.fetchone()
-
-    cur=db.execute("select id, name from tags where id='" + \
-        str(doc[3]) + "'")
+    cur=db.execute("select id, name from tags where id=?", \
+            [str(doc[3])])
     tag=cur.fetchone()
-
     return render_template('show_doc_details.html', doc=doc, \
         tag=tag)
 
@@ -168,11 +163,11 @@ def web_docid(docid):
 def web_upvote(docid):
     '''upvote++'''
     db=get_db()
-    cur=db.execute("select id, upvote from docs where id='" \
-        + str(docid) + "'")
+    cur=db.execute("select id, upvote from docs where id=?", \
+            str(docid))
     uv=cur.fetchone()[1]
-    db.execute('update docs set upvote=' + str(uv+1) + \
-        " where id='"+str(docid)+"'")
+    db.execute('update docs set upvote=? where id=?', \
+            [str(uv+1), str(docid)])
     db.commit()
     flash('upvote successfully')
     return redirect(url_for('web_docid', docid=docid))
@@ -182,11 +177,11 @@ def web_upvote(docid):
 def web_downvote(docid):
     '''downvote++'''
     db=get_db()
-    cur=db.execute("select id, downvote from docs where id='" \
-        + str(docid) + "'")
+    cur=db.execute("select id, downvote from docs where id=?",\
+            str(docid))
     dv=cur.fetchone()[1]
-    db.execute('update docs set downvote=' + str(dv+1) + \
-        " where id='"+str(docid)+"'")
+    db.execute('update docs set downvote=? where id=?', \
+            [str(dv+1), str(docid)])
     db.commit()
     flash('downvote successfully')
     return redirect(url_for('web_docid', docid=docid))
@@ -201,22 +196,17 @@ def web_doc_recent():
     '''
     begin = request.args.get('begin', '1')
     end = request.args.get('end', '10')
-
     db=get_db()
     cur=db.execute("select id, title, content, tag_id, upvote, \
-        downvote from docs order by id desc limit " + \
-        str(int(end)-int(begin)+1) + " offset " + \
-        str(int(begin)-1))
+        downvote from docs order by id desc limit ? offset ?", \
+        [str(int(end)-int(begin)+1), str(int(begin)-1)])
     doclist=cur.fetchall()
-
     return render_template("show_recent_docs.html", \
         doclist=doclist, begin=begin, end=end)
-
 
 @app.route('/imgs')
 def web_imgs():
     return "available imgs:<p>"+'\n'.join(os.listdir("static/img"))
-
 
 #### 404 customizatiohn ####
 
@@ -225,12 +215,10 @@ def page_not_found(error):
     app.logger.error('404')
     return render_template('404.html'), 404
 
-
 #### controllers api ####
 @app.route('/api/tags')
 def api_tags():
     pass
-
 
 if __name__ == '__main__':
     app.run(host='0.0.0.0')
