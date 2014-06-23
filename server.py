@@ -1,12 +1,7 @@
 import os, sqlite3
 
-try:
-    import simplejson as json
-except ImportError:
-    import json
-
 from flask import Flask, request, session, g, redirect, \
-    url_for, abort, render_template, flash
+    url_for, abort, render_template, flash, jsonify
 
 #### config app ####
 
@@ -98,9 +93,13 @@ def web_tags():
     #GET
     cur = db.execute('select id, name from tags order by id')
     taglist=cur.fetchall()
-
-    return render_template('show_tags.html', taglist=taglist)
-
+    if 'json' != request.args.get('format'):
+        return render_template('show_tags.html', taglist=taglist)
+    else:
+        ts=[]
+        for i in taglist:
+            ts.append({"id":i[0], "name":i[1]})
+        return jsonify({'tags':ts})
 
 @app.route('/docs', methods=['GET', 'POST'])
 def web_docs():
@@ -125,9 +124,15 @@ def web_docs():
     doclist=cur.fetchall()
     cur = db.execute('select id, name from tags order by id')
     taglist=cur.fetchall()
-    return render_template('show_docs.html', doclist=doclist, \
-        taglist=taglist)
-
+    if 'json' != request.args.get('format'):
+        return render_template('show_docs.html', doclist=doclist, \
+            taglist=taglist)
+    else:
+        ds=[]
+        for i in doclist:
+            ds.append({"id":i[0], "title":i[1], "tag_id":i[3], \
+                    "upvote":i[4], "downvote":i[5]})
+        return jsonify({'docs' : ds})
 
 @app.route('/tag/<int:tagid>')
 def web_tagid(tagid):
@@ -142,9 +147,16 @@ def web_tagid(tagid):
         tag_id, upvote, downvote from docs where tag_id=?) \
         order by id desc", [str(tagid)])
     doclist=cur.fetchall()
-    return render_template('show_tag_docs.html', \
-        doclist=doclist, tagname=tagname)
-
+    if 'json' != request.args.get('format'):
+        return render_template('show_tag_docs.html', \
+            doclist=doclist, tagname=tagname)
+    else:
+        ds=[]
+        for i in doclist:
+            ds.append({"id":i[0], "title":i[1], "tag_id":i[3], \
+                    "upvote":i[4], "downvote":i[5]})
+        return jsonify({'docs' : ds, 'tagid': tagid, \
+            'tagname':tagname})
 
 @app.route('/doc/<int:docid>')
 def web_docid(docid):
@@ -156,8 +168,14 @@ def web_docid(docid):
     cur=db.execute("select id, name from tags where id=?", \
             [str(doc[3])])
     tag=cur.fetchone()
-    return render_template('show_doc_details.html', doc=doc, \
-        tag=tag)
+    if 'json' != request.args.get('format'):
+        return render_template('show_doc_details.html', doc=doc, \
+            tag=tag)
+    else:
+        return jsonify({'id':doc[0], 'title':doc[1], \
+                'content':doc[2], 'tag_id':doc[3], \
+                'upvote':doc[4], 'downvote':doc[5], \
+                'tagname':tag[1]})
 
 @app.route('/doc/<int:docid>/upvote')
 def web_upvote(docid):
@@ -170,7 +188,10 @@ def web_upvote(docid):
             [str(uv+1), str(docid)])
     db.commit()
     flash('upvote successfully')
-    return redirect(url_for('web_docid', docid=docid))
+    if 'json' != request.args.get('format'):
+        return redirect(url_for('web_docid', docid=docid))
+    else:
+        return jsonify({'newupvote':uv+1})
 
 
 @app.route('/doc/<int:docid>/downvote')
@@ -184,8 +205,10 @@ def web_downvote(docid):
             [str(dv+1), str(docid)])
     db.commit()
     flash('downvote successfully')
-    return redirect(url_for('web_docid', docid=docid))
-
+    if 'json' != request.args.get('format'):
+        return redirect(url_for('web_docid', docid=docid))
+    else:
+        return jsonify({'newdownvote':dv+1})
 
 @app.route('/doc/recent')
 def web_doc_recent():
@@ -201,12 +224,19 @@ def web_doc_recent():
         downvote from docs order by id desc limit ? offset ?", \
         [str(int(end)-int(begin)+1), str(int(begin)-1)])
     doclist=cur.fetchall()
-    return render_template("show_recent_docs.html", \
-        doclist=doclist, begin=begin, end=end)
+    if 'json' != request.args.get('format'):
+        return render_template("show_recent_docs.html", \
+            doclist=doclist, begin=begin, end=end)
+    else:
+        ds=[]
+        for i in doclist:
+            ds.append({"id":i[0], "title":i[1], 'content':i[2], \
+                    "tag_id":i[3], "upvote":i[4], "downvote":i[5]})
+        return jsonify({'docs' : ds})
 
 @app.route('/imgs')
 def web_imgs():
-    return "available imgs:<p>"+'\n'.join(os.listdir("static/img"))
+    return '\n'.join(os.listdir("static/img"))
 
 #### 404 customizatiohn ####
 
@@ -214,11 +244,6 @@ def web_imgs():
 def page_not_found(error):
     app.logger.error('404')
     return render_template('404.html'), 404
-
-#### controllers api ####
-@app.route('/api/tags')
-def api_tags():
-    pass
 
 if __name__ == '__main__':
     app.run(host='0.0.0.0')
