@@ -10,7 +10,7 @@ app.config.from_object(__name__)
 
 app.config.update(dict(
     DATABASE=os.path.join(app.root_path, 'data.db'),
-    DEBUG=True,
+   # DEBUG=True,
     SECRET_KEY='temp key',
     USERNAME='iam',
     PASSWORD='smart'
@@ -26,7 +26,7 @@ def connect_db():
 
 def get_db():
     '''
-    if application context g doesn't have db 
+    if application context g doesn't have db
     connected then connect
     '''
     if not hasattr(g, 'sqlite_db'):
@@ -196,7 +196,7 @@ def web_downvote(docid):
 def web_doc_recent():
     '''
     begin and end are not ids
-    they are the index of doc sort by id desc 
+    they are the index of doc sort by id desc
     from 1 to doc count
     '''
     begin = request.args.get('begin', '1')
@@ -233,4 +233,4 @@ def api_tags():
 
 
 if __name__ == '__main__':
-    app.run()
+    app.run(host='0.0.0.0')
