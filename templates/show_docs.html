@@ -1,7 +1,7 @@
 {% extends "layout.html" %}
 {% block body %}
   {% if session.logged_in %}
-    <form action="{{ url_for('web_docs') }}" method=post class=add-doc>
+    <form action="{{ url_for('docs') }}" method=post class=add-doc>
       <dl>
         <dt>Doc Title:</dt>
         <dd><input type=text size=30 name=title></dd>
