@@ -46,10 +46,10 @@ def init_db():
             db.cursor().executescript(f.read())
         db.commit()
 
-#### controller - web ####
+#### controller ####
 
 @app.route('/')
-def web_root():
+def root():
     '''
     show home page
     '''
@@ -66,7 +66,7 @@ def login():
         else:
             session['logged_in'] = True
             flash('You were logged in')
-            return redirect(url_for('web_root'))
+            return redirect(url_for('root'))
     return render_template('login.html', error=error)
 
 @app.route('/logout')
@@ -76,7 +76,7 @@ def logout():
     return redirect(url_for('login'))
 
 @app.route('/tags', methods=['GET', 'POST'])
-def web_tags():
+def tags():
     '''
     add new tag when POST
     show tag list and add new tag form
@@ -89,7 +89,7 @@ def web_tags():
             [request.form['newtagname']])
         db.commit()
         flash('new tag added successfully')
-        return redirect(url_for('web_tags'))
+        return redirect(url_for('tags'))
     #GET
     cur = db.execute('select id, name from tags order by id')
     taglist=cur.fetchall()
@@ -102,7 +102,7 @@ def web_tags():
         return jsonify({'tags':ts})
 
 @app.route('/docs', methods=['GET', 'POST'])
-def web_docs():
+def docs():
     '''
     show all docs and add new doc form
     add new doc if POST
@@ -117,7 +117,7 @@ def web_docs():
             request.form['tagid']])
         db.commit()
         flash('new doc added successfully')
-        return redirect(url_for('web_docs'))
+        return redirect(url_for('docs'))
     #GET
     cur=db.execute('select id, title, content, tag_id, \
         upvote, downvote from docs order by id desc')
@@ -135,7 +135,7 @@ def web_docs():
         return jsonify({'docs' : ds})
 
 @app.route('/tag/<int:tagid>')
-def web_tagid(tagid):
+def tag(tagid):
     '''
     list all docs with tag tagid
     '''
@@ -159,7 +159,7 @@ def web_tagid(tagid):
             'tagname':tagname})
 
 @app.route('/doc/<int:docid>')
-def web_docid(docid):
+def doc(docid):
     '''show doc details'''
     db=get_db()
     cur=db.execute("select id, title, content, tag_id, upvote, \
@@ -178,7 +178,7 @@ def web_docid(docid):
                 'tagname':tag[1]})
 
 @app.route('/doc/<int:docid>/upvote')
-def web_upvote(docid):
+def upvote(docid):
     '''upvote++'''
     db=get_db()
     cur=db.execute("select id, upvote from docs where id=?", \
@@ -189,13 +189,13 @@ def web_upvote(docid):
     db.commit()
     flash('upvote successfully')
     if 'json' != request.args.get('format'):
-        return redirect(url_for('web_docid', docid=docid))
+        return redirect(url_for('doc', docid=docid))
     else:
         return jsonify({'newupvote':uv+1})
 
 
 @app.route('/doc/<int:docid>/downvote')
-def web_downvote(docid):
+def downvote(docid):
     '''downvote++'''
     db=get_db()
     cur=db.execute("select id, downvote from docs where id=?",\
@@ -206,12 +206,12 @@ def web_downvote(docid):
     db.commit()
     flash('downvote successfully')
     if 'json' != request.args.get('format'):
-        return redirect(url_for('web_docid', docid=docid))
+        return redirect(url_for('doc', docid=docid))
     else:
         return jsonify({'newdownvote':dv+1})
 
 @app.route('/doc/recent')
-def web_doc_recent():
+def doc_recent():
     '''
     begin and end are not ids
     they are the index of doc sort by id desc
@@ -230,12 +230,12 @@ def web_doc_recent():
     else:
         ds=[]
         for i in doclist:
-            ds.append({"id":i[0], "title":i[1], 'content':i[2], \
+            ds.append({"id":i[0], "title":i[1], "content":i[2], \
                     "tag_id":i[3], "upvote":i[4], "downvote":i[5]})
         return jsonify({'docs' : ds})
 
 @app.route('/imgs')
-def web_imgs():
+def imgs():
     return '\n'.join(os.listdir("static/img"))
 
 #### 404 customizatiohn ####
