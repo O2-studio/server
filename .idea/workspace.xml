@@ -2,10 +2,7 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="5806e316-ecd7-4854-9c99-083bc07e367f" name="Default" comment="">
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/data.db" afterPath="$PROJECT_DIR$/data.db" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/server.py" afterPath="$PROJECT_DIR$/server.py" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/templates/show_doc_details.html" afterPath="$PROJECT_DIR$/templates/show_doc_details.html" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
     </list>
     <ignored path="server.iws" />
     <ignored path=".idea/workspace.xml" />
@@ -121,11 +118,12 @@
       <file leaf-file-name="server.py" pinned="false" current="true" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/server.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.01665345" vertical-offset="3879" max-vertical-offset="5140">
-              <caret line="208" column="47" selection-start-line="208" selection-start-column="47" selection-end-line="208" selection-end-column="47" />
+            <state vertical-scroll-proportion="0.777954" vertical-offset="3999" max-vertical-offset="5260">
+              <caret line="260" column="0" selection-start-line="260" selection-start-column="0" selection-end-line="260" selection-end-column="0" />
               <folding>
                 <element signature="e#0#18#0" expanded="true" />
-                <element signature="e#6830#6941#1" expanded="true" />
+                <element signature="e#1156#1186#1" expanded="true" />
+                <element signature="e#7051#7162#1" expanded="true" />
               </folding>
             </state>
           </provider>
@@ -502,7 +500,7 @@
   </component>
   <component name="ToolWindowManager">
     <frame x="-8" y="-8" width="2576" height="1416" extended-state="6" />
-    <editor active="false" />
+    <editor active="true" />
     <layout>
       <window_info id="Palette&#9;" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="-1" side_tool="false" content_ui="tabs" />
       <window_info id="Changes" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="-1" side_tool="false" content_ui="tabs" />
@@ -646,11 +644,12 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/server.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.01665345" vertical-offset="3879" max-vertical-offset="5140">
-          <caret line="208" column="47" selection-start-line="208" selection-start-column="47" selection-end-line="208" selection-end-column="47" />
+        <state vertical-scroll-proportion="0.777954" vertical-offset="3999" max-vertical-offset="5260">
+          <caret line="260" column="0" selection-start-line="260" selection-start-column="0" selection-end-line="260" selection-end-column="0" />
           <folding>
             <element signature="e#0#18#0" expanded="true" />
-            <element signature="e#6830#6941#1" expanded="true" />
+            <element signature="e#1156#1186#1" expanded="true" />
+            <element signature="e#7051#7162#1" expanded="true" />
           </folding>
         </state>
       </provider>

@@ -153,8 +153,12 @@ def tag(tagid):
     else:
         ds=[]
         for i in doclist:
-            ds.append({"id":i[0], "title":i[1], "tag_id":i[3], \
+            if 'true' != request.args.get('content'):
+                ds.append({"id":i[0], "title":i[1], "tag_id":i[3], \
                     "upvote":i[4], "downvote":i[5]})
+            else:
+                ds.append({"id":i[0], "title":i[1], "content":i[2], "tag_id":i[3], \
+                           "upvote":i[4], "downvote":i[5]})
         return jsonify({'docs' : ds, 'tagid': tagid, \
             'tagname':tagname})
 
@@ -253,7 +257,7 @@ def doc_recent():
 def imgs():
     return '\n'.join(os.listdir("static/img"))
 
-#### 404 customizatiohn ####
+#### 404 customization ####
 
 @app.errorhandler(404)
 def page_not_found(error):
