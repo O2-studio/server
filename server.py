@@ -1,4 +1,4 @@
-import os, sqlite3
+import os, sqlite3, json
 
 from flask import Flask, request, session, g, redirect, \
     url_for, abort, render_template, flash, jsonify
@@ -10,7 +10,7 @@ app.config.from_object(__name__)
 
 app.config.update(dict(
     DATABASE=os.path.join(app.root_path, 'data.db'),
-    #DEBUG=True, #comment out in production
+    DEBUG=True, #comment out in production
     SECRET_KEY='temp key',#replace in prod
     USERNAME='iam',
     PASSWORD='smart'
@@ -134,6 +134,24 @@ def docs():
                     "upvote":i[4], "downvote":i[5]})
         return jsonify({'docs' : ds})
 
+@app.route('/docs/add', methods=['POST'])
+def add():
+    if request.method=='POST':
+        if 'iamsmart' != request.args.get('key'):
+            abort(401)
+        data = request.get_json()
+        doc1 = json.loads(json.dumps(data))
+        if not (doc1.has_key('title') and doc1.has_key('content') and doc1.has_key('tagid')):
+            return jsonify({"status":"failed"})
+        else:
+            db=get_db()
+            db.execute('insert into docs (title, content, tag_id, \
+                upvote, downvote) values (?, ?, ?, 0, 0)', \
+                       [doc1['title'], doc1['content'], \
+                        doc1['tagid']])
+            db.commit()
+            return jsonify({"status":"successful"})
+
 @app.route('/tag/<int:tagid>')
 def tag(tagid):
     '''
@@ -221,7 +239,7 @@ def remove(docid):
         abort(401)
     db=get_db()
     db.execute("delete from docs where id=?", \
-                   str(docid))
+                   [str(docid)])
     db.commit()
     flash('remove successfully')
     if 'json' != request.args.get('format'):
