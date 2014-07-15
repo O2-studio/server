@@ -1,6 +1,6 @@
 {% extends "layout.html" %}
 {% block body %}
-  <div class="doc">
+<div class="doc">
     <div class="header">
         <p class="title">{{ doc[1]|safe }}</p>
         <a href="/tag/{{ tag[0] }}">#{{ tag[1] }}</a>
@@ -9,12 +9,12 @@
         {{ doc[2]|safe }}
     </div>
     <hr>
-    <div class="vote">   
+    <div class="vote">
         <a href="/doc/{{ doc[0] }}/upvote">Vote Up</a> #{{ doc[4] }}
         <a href="/doc/{{ doc[0] }}/downvote">Vote Down</a> #{{ doc[5] }}
     </div>
-      <div>
-          <a href="/doc/{{ doc[0] }}/remove">Remove</a>
-      </div>
-  </div>
+    <div>
+        <a href="/doc/{{ doc[0] }}/remove">Remove</a>
+    </div>
+</div>
 {% endblock %}

@@ -1,26 +1,26 @@
 {% extends "layout.html" %}
 {% block body %}
-  <p>Order docs by id desc, showing from #{{ begin }} to #{{ end }}.</p>
+<p>Order docs by id desc, showing from #{{ begin }} to #{{ end }}.</p>
 
-  <hr>
-  <table>
+<hr>
+<table>
     <caption>Recent Docs</caption>
     <thead>
-      <tr>
+    <tr>
         <th>Doc ID</th>
         <th>Doc Title</th>
-      </tr>
+    </tr>
     </thead>
     <tbody>
-      {% for doc in doclist %}
-        <tr>
-          <td><a href="/doc/{{ doc.id }}">{{ doc.id }}</a></td>
-          <td>{{ doc.title|safe }}</td>
-          {% else %}
-          <td>NA</td>
-          <td>no docs in db</td>
-        </tr>
-      {% endfor %}
+    {% for doc in doclist %}
+    <tr>
+        <td><a href="/doc/{{ doc.id }}">{{ doc.id }}</a></td>
+        <td>{{ doc.title|safe }}</td>
+        {% else %}
+        <td>NA</td>
+        <td>no docs in db</td>
+    </tr>
+    {% endfor %}
     </tbody>
-  </table>
+</table>
 {% endblock %}

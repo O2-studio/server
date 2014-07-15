@@ -1,33 +1,33 @@
 {% extends "layout.html" %}
 {% block body %}
-  {% if session.logged_in %}
-    <form action="{{ url_for('tags') }}" method=post class=add-tag>
-      <dl>
+{% if session.logged_in %}
+<form action="{{ url_for('tags') }}" method=post class=add-tag>
+    <dl>
         <dt>Tag Name:</dt>
         <dd><input type=text size=30 name=newtagname></dd>
         <dd><input type=submit value=Add></dd>
-      </dl>
-    </form>
-  {% endif %}
-  <hr>
-  <table>
+    </dl>
+</form>
+{% endif %}
+<hr>
+<table>
     <caption>Existing Tags</caption>
     <thead>
-      <tr>
+    <tr>
         <th>Tag ID</th>
         <th>Tag Name</th>
-      </tr>
+    </tr>
     </thead>
     <tbody>
-      {% for tag in taglist %}
-        <tr>
-          <td><a href="/tag/{{ tag.id }}">{{ tag.id }}</a></td>
-          <td>{{ tag.name }}</td>
-          {% else %}
-          <td>NA</td>
-          <td>no tags in db</td>
-        </tr>
-      {% endfor %}
+    {% for tag in taglist %}
+    <tr>
+        <td><a href="/tag/{{ tag.id }}">{{ tag.id }}</a></td>
+        <td>{{ tag.name }}</td>
+        {% else %}
+        <td>NA</td>
+        <td>no tags in db</td>
+    </tr>
+    {% endfor %}
     </tbody>
-  </table>
+</table>
 {% endblock %}

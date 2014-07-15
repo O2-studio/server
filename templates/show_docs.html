@@ -1,43 +1,43 @@
 {% extends "layout.html" %}
 {% block body %}
-  {% if session.logged_in %}
-    <form action="{{ url_for('docs') }}" method=post class=add-doc>
-      <dl>
+{% if session.logged_in %}
+<form action="{{ url_for('docs') }}" method=post class=add-doc>
+    <dl>
         <dt>Doc Title:</dt>
         <dd><input type=text size=30 name=title></dd>
         <dt>Content:</dt>
         <dd><textarea name=content rows=5 cols=40></textarea></dd>
         <dt>Tag:</dt>
         <dd>
-          <select name=tagid>
-            {% for tag in taglist %}
-            <option value="{{ tag.id }}">{{ tag.name }}</option>
-            {% endfor %}
-          </select>
+            <select name=tagid>
+                {% for tag in taglist %}
+                <option value="{{ tag.id }}">{{ tag.name }}</option>
+                {% endfor %}
+            </select>
         </dd>
         <dd><input type=submit value=Add></dd>
-      </dl>
-    </form>
-  {% endif %}
-  <hr>
-  <table>
+    </dl>
+</form>
+{% endif %}
+<hr>
+<table>
     <caption>Existing Docs</caption>
     <thead>
-      <tr>
+    <tr>
         <th>Doc ID</th>
         <th>Doc Title</th>
-      </tr>
+    </tr>
     </thead>
     <tbody>
-      {% for doc in doclist %}
-        <tr>
-          <td><a href="/doc/{{ doc.id }}">{{ doc.id }}</a></td>
-          <td>{{ doc.title|safe }}</td>
-          {% else %}
-          <td>NA</td>
-          <td>no docs in db</td>
-        </tr>
-      {% endfor %}
+    {% for doc in doclist %}
+    <tr>
+        <td><a href="/doc/{{ doc.id }}">{{ doc.id }}</a></td>
+        <td>{{ doc.title|safe }}</td>
+        {% else %}
+        <td>NA</td>
+        <td>no docs in db</td>
+    </tr>
+    {% endfor %}
     </tbody>
-  </table>
+</table>
 {% endblock %}
