@@ -210,6 +210,21 @@ def downvote(docid):
     else:
         return jsonify({'newdownvote':dv+1})
 
+@app.route('/doc/<int:docid>/remove')
+def remove(docid):
+    '''remove the doc'''
+    if not session.get('logged_in'):
+        abort(401)
+    db=get_db()
+    db.execute("delete from docs where id=?", \
+                   str(docid))
+    db.commit()
+    flash('remove successfully')
+    if 'json' != request.args.get('format'):
+        return redirect(url_for('docs'))
+    else:
+        return jsonify({'remove':"successful"})
+
 @app.route('/doc/recent')
 def doc_recent():
     '''
